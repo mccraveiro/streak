@@ -5,7 +5,7 @@ var panels = [null, null];
 var arrows = [null, null];
 
 // The names of the directions
-var names = ['right', 'up', 'left', 'down'];
+var names = ['left', 'up', 'right', 'down'];
 
 // The number of rounds elapsed
 var rounds = 0;
@@ -16,6 +16,10 @@ var fall_time = 1000, press_time = 2000;
 
 // The timer handler
 var timer = null;
+
+// A flag to determine whether or not the player 
+// can press the key
+var allowed = false;
 
 // The direction to be pressed
 var expected = 0;
@@ -30,13 +34,23 @@ function getPanel (preset) {
 
 // The unstack function which evaluates a key pressed
 function evaluate (key) {
-    if (key < 37 || key > 40)
+    key -= 37;
+
+    if (key < 0 || key > 3 || key !== expected || !allowed)
         return;
+
+    clearTimeout(timer);
+
+    arrows[current].addClass('correct');
+
+    game();
 }
 
 // The game function which places the tiles and is recursively called
 function game () {
     rounds++;
+
+    allowed = false;
 
     var next = current ^ 1;
 
@@ -53,10 +67,13 @@ function game () {
     expected = direction;
 
     panels[current].animate({top: 0}, fall_time, function () {
+        allowed = true;
         
-        panels[(current ^ 1)].css({top: '-100%'});
+        panels[(current ^ 1)].css('top', '-100%');
 
-        setTimeout(function () {
+        clearTimeout(timer);
+
+        timer = setTimeout(function () {
             game();
         }, press_time);
     });
