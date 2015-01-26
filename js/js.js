@@ -10,12 +10,18 @@ var names = ['left', 'up', 'right', 'down'];
 // The number of rounds elapsed
 var rounds = 0;
 
+// The number of right pressed panels
+var right = 0;
+
 // The time (ms) that panels are going to come and are
 // going to awaits to be dismissed
-var fall_time = 1000, press_time = 2000;
+var fall_time = 700, press_time = 2000;
 
 // The timer handler
 var timer = null;
+
+// Whether or not the player paused the game
+var paused = false;
 
 // A flag to determine whether or not the player 
 // can press the key
@@ -39,6 +45,8 @@ function evaluate (key) {
     if (key < 0 || key > 3 || key !== expected || !allowed)
         return;
 
+    right++;
+
     clearTimeout(timer);
 
     arrows[current].addClass('correct');
@@ -48,6 +56,9 @@ function evaluate (key) {
 
 // The game function which places the tiles and is recursively called
 function game () {
+    if (paused)
+        return;
+
     rounds++;
 
     allowed = false;
@@ -68,7 +79,7 @@ function game () {
 
     panels[current].animate({top: 0}, fall_time, function () {
         allowed = true;
-        
+
         panels[(current ^ 1)].css('top', '-100%');
 
         clearTimeout(timer);
@@ -81,6 +92,15 @@ function game () {
 
 // Let the games begin!
 $(document).ready(function() {
+    window.addEventListener('focus', function() {
+        paused = false;
+        game();
+    });
+
+    window.addEventListener('blur', function() {
+        paused = true;
+        clearTimeout(timer);
+    });
 
     panels[0] = $('#panel-0');
     panels[1] = $('#panel-1');
