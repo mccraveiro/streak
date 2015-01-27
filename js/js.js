@@ -21,6 +21,9 @@ var rounds = 0;
 // The number of right pressed panels
 var right = 0;
 
+// The number of remaining lives
+var lives = 5;
+
 // The time (ms) that panels are going to come and are
 // going to awaits to be dismissed
 var fall_time = 700, press_time = 3000;
@@ -55,12 +58,33 @@ function getPanel (preset) {
     return '<section class="preset-' + preset + '" id="panel-' + (n++) + '"><i></i></section>'
 }
 
+// The function that deals with losing lp
+function wrong () {
+    $('.lives i:nth-child(' + lives + ')').removeClass().addClass('icon-circle-empty')
+
+    clearTimeout(timer);
+
+    if (--lives === 0) {
+        clearTimeout(timer);
+        panels[0].fadeOut();
+        panels[1].fadeOut();
+        $('.lives').fadeOut();
+        playing = false;
+        return;
+    }
+
+    game();
+}
+
 // The unstack function which evaluates a key pressed
 function evaluate (key) {
     key -= 37;
 
-    if (key < 0 || key > 3 || key !== expected || !allowed)
+    if (key < 0 || key > 3 || !allowed)
         return;
+
+    if (key !== expected)
+        return wrong();
 
     $('#counter').html(++right);
 
@@ -127,9 +151,7 @@ function game () {
 
         clearTimeout(timer);
 
-        timer = setTimeout(function () {
-            game();
-        }, press_time);
+        timer = setTimeout(wrong, press_time);
     });
 }
 
@@ -171,7 +193,23 @@ $(document).ready(function() {
     $('h1').animate({'margin-top': '10%'}, 'slow', function () {
         $('.txt').fadeIn();
         $('.txt a').click(function(){
+            $('.lives i').removeClass().addClass('icon-circle');
+
+            $('h2').html('0');
+
             $('h2').fadeIn();
+            $('.lives').fadeIn();
+
+            fall_time = 700;
+            press_time = 3000;
+            rounds = 0;
+            lives = 5;
+
+            panels[0].fadeIn();
+            panels[1].fadeIn();
+
+            panels[0].css({top: '-100%', left: '-100%'});
+            panels[1].css({top: '-100%', left: '-100%'});
 
             playing = true;
             game();
