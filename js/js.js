@@ -7,6 +7,14 @@ var arrows = [null, null];
 // The names of the directions
 var names = ['left', 'up', 'right', 'down'];
 
+// Direction animations
+var positions = [
+    {x: '100%', y: '0'},
+    {x: '0', y: '100%'},
+    {x: '-100%', y: '0'},
+    {x: '0', y: '-100%'}
+];
+
 // The number of rounds elapsed
 var rounds = 0;
 
@@ -15,7 +23,7 @@ var right = 0;
 
 // The time (ms) that panels are going to come and are
 // going to awaits to be dismissed
-var fall_time = 700, press_time = 2000;
+var fall_time = 700, press_time = 3000;
 
 // The timer handler
 var timer = null;
@@ -45,7 +53,7 @@ function evaluate (key) {
     if (key < 0 || key > 3 || key !== expected || !allowed)
         return;
 
-    right++;
+    $('#counter').html(++right);
 
     clearTimeout(timer);
 
@@ -54,12 +62,20 @@ function evaluate (key) {
     game();
 }
 
+// Updates the difficulty of the game
+function difficulty () {
+    press_time -= 50;
+    press_time = Math.max(press_time, 100);
+}
+
 // The game function which places the tiles and is recursively called
 function game () {
     if (paused)
         return;
 
     rounds++;
+
+    difficulty();
 
     allowed = false;
 
@@ -77,7 +93,11 @@ function game () {
 
     expected = direction;
 
-    panels[current].animate({top: 0}, fall_time, function () {
+    var pos = positions[direction];
+
+    panels[current].css({left: pos.x, top: pos.y});
+
+    panels[current].animate({left: 0, top: 0}, fall_time, function () {
         allowed = true;
 
         panels[(current ^ 1)].css('top', '-100%');
