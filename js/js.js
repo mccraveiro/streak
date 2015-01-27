@@ -31,6 +31,9 @@ var timer = null;
 // Whether or not the player paused the game
 var paused = false;
 
+// Whether or not the game is active
+var playing = false;
+
 // A flag to determine whether or not the player 
 // can press the key
 var allowed = false;
@@ -40,6 +43,12 @@ var expected = 0;
 
 // The panel being displayed
 var current = 1;
+
+// The axis of the mouse of the player (when pressed for dragging)
+var axis_x, axis_y;
+
+// The window size
+var W, H;
 
 // Function that returns the panel tag itself
 function getPanel (preset) {
@@ -68,9 +77,23 @@ function difficulty () {
     press_time = Math.max(press_time, 100);
 }
 
+// Returns the direction (37 - 40) when dragged
+function dragDirection (x1, x2, y1, y2) {
+    var delta_x = Math.abs(x2 - x1);
+    var delta_y = Math.abs(y2 - y1);
+
+    if (delta_x < W * 0.1 && delta_y < H * 0.1)
+        return -1;
+
+    if (delta_x > delta_y)
+        return x2 > x1 ? 39 : 37;
+
+    return y2 > y1 ? 40 : 38;
+}
+
 // The game function which places the tiles and is recursively called
 function game () {
-    if (paused)
+    if (!playing || paused)
         return;
 
     rounds++;
@@ -112,12 +135,22 @@ function game () {
 
 // Let the games begin!
 $(document).ready(function() {
-    window.addEventListener('focus', function() {
+    $('section').mousedown(function (e) {
+        axis_x = e.pageX;
+        axis_y = e.pageY;
+    });
+
+    $('section').mouseup(function (e) {
+        evaluate(dragDirection(axis_x, e.pageX, axis_y, e.pageY));
+    });
+
+
+    window.addEventListener('focus', function () {
         paused = false;
         game();
     });
 
-    window.addEventListener('blur', function() {
+    window.addEventListener('blur', function () {
         paused = true;
         clearTimeout(timer);
     });
@@ -128,9 +161,20 @@ $(document).ready(function() {
     arrows[0] = $('#panel-0 i');
     arrows[1] = $('#panel-1 i');
 
+    W = panels[0].width();
+    H = panels[0].height();
+
     $('body').keydown(function (e) {
         evaluate(e.keyCode);
     });
 
-    game();
+    $('h1').animate({'margin-top': '10%'}, 'slow', function () {
+        $('.txt').fadeIn();
+        $('.txt a').click(function(){
+            $('h2').fadeIn();
+
+            playing = true;
+            game();
+        });
+    });
 });

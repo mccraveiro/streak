@@ -3,24 +3,53 @@
 	padding: 0;
 }
 
-h1 {
+h2 {
+	display: none;
 	position: absolute;
 	left: 1em;
 	top: 0.5em;
-	font-size: 3em;
+	font-size: 2.6em;
 	z-index: 100;
 	color: #fff;
+	text-shadow: 1px 2px 0 darken(#d5dee9, 20%);
+	box-shadow: 0 3px 0 darken(#d5dee9, 20%);
 	font-family: 'Yanone Kaffeesatz', sans-serif;
+	background: darken(#d5dee9, 60%);
+	width: 2em;
+	height: 2em;
+	line-height: 1.8em;
+	border-radius: 100%;
+	text-align: center;
+}
+
+h1 {
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	margin: 20% auto 0 auto;
+	height: 40%;
+	font-size: 800%;
+	width: 100%;
+	text-align: center;
+	color: darken(#d5dee9, 60%);
+	text-shadow: 0 2px 0 darken(#d5dee9, 20%);
+
+	b {
+		color: #d13944;
+		text-shadow: 0 2px 0 lighten(#d13944, 20%);
+	}
 }
 
 body, html {
 	width: 100%;
 	height: 100%;
+	margin: 0;
+    padding: 0;
 }
 
 body {
-	background: #c5e9ba;
+	background: #d5dee9;
 	overflow: hidden;
+	font-family: 'Noto Sans', sans-serif;
+	font-size: 1.2em;
 }
 
 section {
@@ -33,9 +62,9 @@ section {
 
 	i {
 		display: block;
-		font-size: 40em;
+		font-size: 3000%;
 		width: 100%;
-		height: 80%;
+		height: 100%;
 		position: absolute;
 		left: 0;
 		right: 0;
@@ -48,6 +77,55 @@ section {
 			color: #ffffff;
 		}
 	}
+}
+
+.txt {
+	background: #fefefe;
+	border-bottom: solid 0.5em #eee;
+	padding: 1%;
+	width: 60%;
+	margin: -7% auto 0 auto;
+	border-radius: 5px;
+	color: #555;
+	display: none;
+
+	span {
+		color: #222;
+		display: block;
+		margin: 0.5em 0;
+	}
+
+	ul {
+		list-style-position: inside;
+		list-style-type: square;
+		margin-left: 1em;	
+	}
+
+	.centering {
+		text-align: center;
+		margin-top: 2em;
+	}
+}
+
+a {
+    display: inline-block;
+    width: 20%;
+    padding: 0.6em;
+    text-align: center;
+    font-size: 0.8em;
+    letter-spacing: 0.1em;
+    border: solid 1px darken(#d5dee9, 60%);
+    border-radius: 3px;
+    color: darken(#d5dee9, 60%);
+    text-decoration: none;
+    transition: all .2s lisnear;
+    -webkit-transition: all .2s linear;
+    cursor: pointer;
+
+    &:hover {
+        background: darken(#d5dee9, 60%);
+        color: #fff;
+    }
 }
 
 @color0: #E73F3F;
