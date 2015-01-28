@@ -58,6 +58,7 @@ body, html {
 	height: 100%;
 	margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 body {
@@ -73,11 +74,14 @@ section {
 	position: absolute;
 	top: -100%;
 	left: -100%;	
+	background: #f00;
 	z-index: 1;
+	overflow: auto;
 
 	i {
 		display: block;
-		font-size: 3000%;
+		font-size: 20em;
+		line-height: 2em;
 		width: 100%;
 		height: 100%;
 		position: absolute;
@@ -177,4 +181,10 @@ a {
 .preset-4 {
 	background: @color4;
 	color: darken(@color4, 20%);
+}
+
+@media (max-width: 400px) {
+    body {
+        font-size: 14px;
+    };
 }
