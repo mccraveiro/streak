@@ -47,12 +47,6 @@ var expected = 0;
 // The panel being displayed
 var current = 1;
 
-// The axis of the mouse of the player (when pressed for dragging)
-var axis_x, axis_y;
-
-// The window size
-var W, H;
-
 // Function that returns the panel tag itself
 function getPanel (preset) {
     return '<section class="preset-' + preset + '" id="panel-' + (n++) + '"><i></i></section>'
@@ -60,6 +54,9 @@ function getPanel (preset) {
 
 // The function that deals with losing lp
 function wrong () {
+    arrows[current].removeClass().addClass('icon-cancel');
+    // panels[current].removeClass().addClass('preset-error');
+
     $('.lives i:nth-child(' + lives + ')').removeClass().addClass('icon-circle-empty')
 
     clearTimeout(timer);
@@ -78,9 +75,12 @@ function wrong () {
 
 // The unstack function which evaluates a key pressed
 function evaluate (key) {
+    if (!playing || paused || !allowed)
+        return;
+
     key -= 37;
 
-    if (key < 0 || key > 3 || !allowed)
+    if (key < 0 || key > 3)
         return;
 
     if (key !== expected)
@@ -99,20 +99,6 @@ function evaluate (key) {
 function difficulty () {
     press_time -= 50;
     press_time = Math.max(press_time, 100);
-}
-
-// Returns the direction (37 - 40) when dragged
-function dragDirection (x1, x2, y1, y2) {
-    var delta_x = Math.abs(x2 - x1);
-    var delta_y = Math.abs(y2 - y1);
-
-    if (delta_x < W * 0.1 && delta_y < H * 0.1)
-        return -1;
-
-    if (delta_x > delta_y)
-        return x2 > x1 ? 39 : 37;
-
-    return y2 > y1 ? 40 : 38;
 }
 
 // The game function which places the tiles and is recursively called
@@ -134,6 +120,7 @@ function game () {
     panels[next].removeClass().addClass('preset-' + (rounds % 5));
 
     var direction = ~~(Math.random() * 4);
+
     current = next;
 
     arrows[current].removeClass().addClass('icon-' + names[direction] + '-open');
@@ -157,16 +144,6 @@ function game () {
 
 // Let the games begin!
 $(document).ready(function() {
-    $('section').mousedown(function (e) {
-        axis_x = e.pageX;
-        axis_y = e.pageY;
-    });
-
-    $('section').mouseup(function (e) {
-        evaluate(dragDirection(axis_x, e.pageX, axis_y, e.pageY));
-    });
-
-
     window.addEventListener('focus', function () {
         paused = false;
         game();
@@ -190,6 +167,37 @@ $(document).ready(function() {
         evaluate(e.keyCode);
     });
 
+    Hammer(document.getElementById('panel-0')).on('swiperight', function(e) {
+        console.log(e);
+    });
+
+    Hammer(document.getElementById('panel-1')).on('swiperight', function(e) {
+        console.log(e);
+    });
+
+    // $('section').hammer({threshold: 50}).bind('panleft', function (e) {
+    //     e.preventDefault();
+    //     evaluate(37);
+    // });
+
+    // $('section').hammer({threshold: 5}).bind('panup', function (e) {
+    //     console.log('up ' + expected + ' ' + (1));
+    //     e.preventDefault();
+    //     evaluate(38);
+    // });
+
+    // $('section').hammer({threshold: 50}).bind('panright', function (e) {
+    //     e.preventDefault();
+    //     evaluate(39);
+    // });
+
+    // $('section').hammer({threshold: 5}).bind('pandown', function (e) {
+    //     console.log('down ' + expected + ' ' + (3));
+    //     e.preventDefault();
+    //     evaluate(40);
+    //});
+
+    
     $('h1').animate({'margin-top': '10%'}, 'slow', function () {
         $('.txt').fadeIn();
         $('.txt a').click(function(){
@@ -204,6 +212,7 @@ $(document).ready(function() {
             press_time = 3000;
             rounds = 0;
             lives = 5;
+            right = 0;
 
             panels[0].fadeIn();
             panels[1].fadeIn();
