@@ -1,50 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8"/>
-	<meta name="author" content="Breno Lima de Freitas"/>
-	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8"/>
+    <meta name="author" content="Breno Lima de Freitas"/>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <meta property="og:image" content="http://breno.io/streak/img/favicon.png"/>
 
-	<title>Streak</title>
+    <title>Streak</title>
 
-	<!-- <link href="img/favicon.ico" rel="icon" type="image/x-icon"/> -->
-	<link href="img/favicon.png" rel="icon" type="image/x-icon"/>
-	<link href='http://fonts.googleapis.com/css?family=Noto+Sans|Yanone+Kaffeesatz:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="css/css.css"/>
-	<link rel="stylesheet" type="text/css" href="css/fontello.css"/>
+    <!-- <link href="img/favicon.ico" rel="icon" type="image/x-icon"/> -->
+    <link href="img/favicon.png" rel="icon" type="image/x-icon"/>
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans|Yanone+Kaffeesatz:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/css.css"/>
+    <link rel="stylesheet" type="text/css" href="css/fontello.css"/>
 
-	<base target="_blank"/>
+    <base target="_blank"/>
 </head>
 <body>
-	<h1>Streak<b>!</b></h1>
-	<h2 id="counter">0</h2>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1543390215934507',
+          xfbml      : true,
+          version    : 'v2.2'
+        });
+      };
 
-	<div class="lives">
-		<i class="icon-circle"></i>
-		<i class="icon-circle"></i>
-		<i class="icon-circle"></i>
-		<i class="icon-circle"></i>
-		<i class="icon-circle"></i>
-	</div>
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
 
-	<div class="txt">
-		The rule is simple: send the panel to the correct direction, if you can!
-		
-		<span>How to Play</span>
+    <h1>Streak<b>!</b></h1>
+    <h2 id="counter">0</h2>
 
-		<ul>
-			<li>Press the arrow buttons corresponding to the arrow in the screen</li>
-			<li>You can also drag the panel to the direction</li>
-			<li>Pay attention not to run out of lives!</li>
-		</ul>
+    <div class="lives">
+        <i class="icon-circle"></i>
+        <i class="icon-circle"></i>
+        <i class="icon-circle"></i>
+        <i class="icon-circle"></i>
+        <i class="icon-circle"></i>
+    </div>
 
-		<div class="centering">
-			<a>Play!</a>
-		</div>
-	</div>
+    <div class="txt">
+        The rule is simple: send the panel to the correct direction, if you can!
+        
+        <span>How to Play</span>
 
-	<section id="panel-0" class="preset-0"><i></i></section>
-	<section id="panel-1" class="preset-1"><i></i></section>
+        <ul>
+            <li>Press the arrow buttons corresponding to the arrow in the screen</li>
+            <li>You can also drag the panel to the direction</li>
+            <li>Pay attention not to run out of lives!</li>
+        </ul>
+
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+
+        <div class="centering">
+            <a>Play!</a>
+        </div>
+    </div>
+
+    <section id="panel-0" class="preset-0"><i></i></section>
+    <section id="panel-1" class="preset-1"><i></i></section>
 </body>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
