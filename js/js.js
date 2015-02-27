@@ -101,6 +101,11 @@ function difficulty () {
     press_time = Math.max(press_time, 100);
 }
 
+// Generates a number in [0, 4]
+function rand () {
+    return ~~(Math.random() * 4);
+}
+
 // The game function which places the tiles and is recursively called
 function game () {
     if (!playing || paused)
@@ -119,7 +124,7 @@ function game () {
 
     panels[next].removeClass().addClass('preset-' + (rounds % 5));
 
-    var direction = ~~(Math.random() * 4);
+    var direction = rand();
 
     current = next;
 
@@ -127,7 +132,7 @@ function game () {
 
     expected = direction;
 
-    var pos = positions[direction];
+    var pos = positions[rand()];
 
     panels[current].css({left: pos.x, top: pos.y});
 
@@ -196,7 +201,6 @@ $(document).ready(function() {
     //     e.preventDefault();
     //     evaluate(40);
     //});
-
     
     $('h1').animate({'margin-top': '10%'}, 'slow', function () {
         $('.txt').fadeIn();
