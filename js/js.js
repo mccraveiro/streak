@@ -73,10 +73,24 @@ function wrong () {
     game();
 }
 
+// Evaluate the keycode related to the pan
+function evaluate_pan (type) {
+    if (!allowed)
+        return;
+
+    for (var i = 0; i < 4; i++)
+        if (type.indexOf(names[i]) >= 0)
+            break;
+
+    evaluate(i + 37);
+}
+
 // The unstack function which evaluates a key pressed
 function evaluate (key) {
     if (!playing || paused || !allowed)
         return;
+
+    allowed = false;
 
     key -= 37;
 
@@ -175,35 +189,19 @@ $(document).ready(function() {
         evaluate(e.keyCode);
     });
 
-    Hammer(document.getElementById('panel-0')).on('swiperight', function(e) {
-        console.log(e);
+    Hammer(document.body, {
+        recognizers: [
+            [Hammer.Pan,{ direction: Hammer.DIRECTION_ALL }]
+        ]
+    }).on('panleft', function (event) {
+        evaluate_pan(event.type);
+    }).on('panup', function (event) {
+        evaluate_pan(event.type);
+    }).on('panright', function (event) {
+        evaluate_pan(event.type);
+    }).on('pandown', function (event) {
+        evaluate_pan(event.type);
     });
-
-    Hammer(document.getElementById('panel-1')).on('swiperight', function(e) {
-        console.log(e);
-    });
-
-    // $('section').hammer({threshold: 50}).bind('panleft', function (e) {
-    //     e.preventDefault();
-    //     evaluate(37);
-    // });
-
-    // $('section').hammer({threshold: 5}).bind('panup', function (e) {
-    //     console.log('up ' + expected + ' ' + (1));
-    //     e.preventDefault();
-    //     evaluate(38);
-    // });
-
-    // $('section').hammer({threshold: 50}).bind('panright', function (e) {
-    //     e.preventDefault();
-    //     evaluate(39);
-    // });
-
-    // $('section').hammer({threshold: 5}).bind('pandown', function (e) {
-    //     console.log('down ' + expected + ' ' + (3));
-    //     e.preventDefault();
-    //     evaluate(40);
-    //});
     
     $('.txt a').click(function(){
         $('.lives i').removeClass().addClass('icon-circle');
