@@ -7,6 +7,9 @@ var arrows = [null, null];
 // The gauge handler
 var gauge = null;
 
+// The score handlers
+var last = null, points = null, msg = null;
+
 // The names of the directions
 var names = ['left', 'up', 'right', 'down'];
 
@@ -33,12 +36,15 @@ var fall_time = 0, press_time = 0;
 
 // Default configurations
 var DEFAULTS = {
-    PRESETS: 7,
+    PRESETS: 8,
     FALL_TIME: 700,
     PRESS_TIME: 2000,
     ROUND_DECREASE: 30,
     MINIMUM_VELOCITY: 600
 };
+
+// The user's best score
+var BEST_SCORE = 0;
 
 // The timer handler
 var timer = null;
@@ -85,13 +91,22 @@ function wrong () {
 
 // The game over handler
 function game_over () {
+
+    if (right > BEST_SCORE) {
+        BEST_SCORE = right;
+        $.cookie('best', right + '', { expires: 365 });
+    }
+
+    last.html(right);
+    best.html(BEST_SCORE)
+
     clearTimeout(timer);
     panels[0].fadeOut();
     panels[1].fadeOut();
     $('.lives').fadeOut();
     $('.timer').fadeOut();
     $('h2').fadeOut();
-    playing = false; 
+    playing = false;
 }
 
 // Evaluate the keycode related to the pan
@@ -185,6 +200,7 @@ function game () {
 
 // Let the games begin!
 $(document).ready(function() {
+
     window.addEventListener('focus', function () {
         paused = false;
         game();
@@ -194,6 +210,10 @@ $(document).ready(function() {
         paused = true;
         clearTimeout(timer);
     });
+
+    best = $('#best');
+    msg = $('.msg');
+    last = $('#last');
 
     gauge = $('#gauge');
 
@@ -228,6 +248,17 @@ $(document).ready(function() {
         evaluate_pan(event.type);
     });
     
+
+    if ($.cookie('best') === undefined)
+        $.cookie('best', '0', { expires: 365 });
+
+    BEST_SCORE = $.cookie('best');
+
+    best.html(BEST_SCORE);
+    last.html(0);
+
+    msg.fadeIn();
+
     $('.txt a').click(function(){
         $('.lives i').removeClass().addClass('icon-circle');
 

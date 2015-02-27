@@ -135,7 +135,7 @@ section {
 	border-radius: 5px;
 	color: #555;
 
-	span {
+	h3 {
 		color: #222;
 		display: block;
 		margin: 0.5em 0;
@@ -157,9 +157,21 @@ section {
 	font-size: 1em;
 }
 
+.msg {
+	display: none;
+    padding: 0.6em;
+    text-align: center;
+    font-size: 0.8em;
+    letter-spacing: 0.1em;
+    border: solid 1px #d13944;
+    border-radius: 3px;
+    color: #d13944;
+    margin-bottom: 1em;
+}
+
 a {
     display: inline-block;
-    width: 20%;
+    min-width: 20%;
     padding: 0.6em;
     text-align: center;
     font-size: 0.8em;
@@ -182,9 +194,10 @@ a {
 @color1: #F76C27;
 @color2: #E7E737;
 @color3: #6D9DD1;
-@color4: #7E45D3;
 @color5: #57d3c8;
 @color6: #E73F3F;
+@color4: #e76395;
+@color7: #7E45D3;
 
 .preset-0 {
 	background: @color0;
@@ -219,6 +232,11 @@ a {
 .preset-6 {
 	background: @color6;
 	color: darken(@color6, 20%);
+}
+
+.preset-7 {
+	background: @color7;
+	color: darken(@color7, 20%);
 }
 
 @media (max-width: 400px) {
