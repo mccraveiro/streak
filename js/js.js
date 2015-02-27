@@ -205,30 +205,27 @@ $(document).ready(function() {
     //     evaluate(40);
     //});
     
-    $('h1').animate({'margin-top': '10%'}, 'slow', function () {
-        $('.txt').fadeIn();
-        $('.txt a').click(function(){
-            $('.lives i').removeClass().addClass('icon-circle');
+    $('.txt a').click(function(){
+        $('.lives i').removeClass().addClass('icon-circle');
 
-            $('h2').html('0');
+        $('h2').html('0');
 
-            $('h2').fadeIn();
-            $('.lives').fadeIn();
+        $('h2').fadeIn();
+        $('.lives').fadeIn();
 
-            fall_time = 700;
-            press_time = 3000;
-            rounds = 0;
-            lives = 3;
-            right = 0;
+        fall_time = 700;
+        press_time = 3000;
+        rounds = 0;
+        lives = 3;
+        right = 0;
 
-            panels[0].fadeIn();
-            panels[1].fadeIn();
+        panels[0].fadeIn();
+        panels[1].fadeIn();
 
-            panels[0].css({top: '-100%', left: '-100%'});
-            panels[1].css({top: '-100%', left: '-100%'});
+        panels[0].css({top: '-100%', left: '-100%'});
+        panels[1].css({top: '-100%', left: '-100%'});
 
-            playing = true;
-            game();
-        });
+        playing = true;
+        game();
     });
 });
