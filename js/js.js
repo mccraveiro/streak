@@ -29,10 +29,16 @@ var lives = 3;
 
 // The time (ms) that panels are going to come and are
 // going to awaits to be dismissed
-var fall_time = 700, press_time = 3000;
+var fall_time = 0, press_time = 0;
 
-// The number of presets
-var PRESETS = 6;
+// Default configurations
+var DEFAULTS = {
+    PRESETS: 7,
+    FALL_TIME: 700,
+    PRESS_TIME: 2000,
+    ROUND_DECREASE: 30,
+    MINIMUM_VELOCITY: 600
+};
 
 // The timer handler
 var timer = null;
@@ -52,21 +58,6 @@ var expected = 0;
 
 // The panel being displayed
 var current = 1;
-
-// A function to toggle fullscreen
-function toggleFullScreen () {
-    var doc = window.document;
-    var docEl = doc.documentElement;
-
-    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement)
-        requestFullScreen.call(docEl);
-
-    else
-        cancelFullScreen.call(doc);
-}
 
 // The function that stops the gauge timer
 function stop_gauge () {
@@ -140,8 +131,8 @@ function evaluate (key) {
 
 // Updates the difficulty of the game
 function difficulty () {
-    press_time -= 50;
-    press_time = Math.max(press_time, 100);
+    press_time -= DEFAULTS.ROUND_DECREASE;
+    press_time = Math.max(press_time, DEFAULTS.MINIMUM_VELOCITY);
 
     // fall_time -= 5;
     // fall_time = Math.max(fall_time, 200);    
@@ -157,8 +148,6 @@ function game () {
     if (!playing || paused)
         return;
 
-    rounds++;
-
     difficulty();
 
     allowed = false;
@@ -168,7 +157,7 @@ function game () {
     panels[current].css('z-index', 0);
     panels[next].css('z-index', 1);
 
-    panels[next].removeClass().addClass('preset-' + (rounds % PRESETS));
+    panels[next].removeClass().addClass('preset-' + (rounds % DEFAULTS.PRESETS));
 
     var direction = rand();
 
@@ -190,6 +179,8 @@ function game () {
         clearTimeout(timer);
         timer = setTimeout(wrong, press_time);
     });
+
+    rounds++;
 }
 
 // Let the games begin!
@@ -246,8 +237,8 @@ $(document).ready(function() {
         $('.lives').fadeIn();
         $('.timer').fadeIn();
 
-        fall_time = 700;
-        press_time = 3000;
+        fall_time = DEFAULTS.FALL_TIME;
+        press_time = DEFAULTS.PRESS_TIME;
         rounds = 0;
         lives = 3;
         right = 0;
