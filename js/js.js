@@ -99,6 +99,9 @@ function evaluate (key) {
 function difficulty () {
     press_time -= 50;
     press_time = Math.max(press_time, 100);
+
+    fall_time -= 5;
+    fall_time = Math.max(fall_time, 200);    
 }
 
 // Generates a number in [0, 4]
