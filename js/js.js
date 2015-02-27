@@ -4,6 +4,9 @@ var panels = [null, null];
 // The arrow handlers
 var arrows = [null, null];
 
+// The gauge handler
+var gauge = null;
+
 // The names of the directions
 var names = ['left', 'up', 'right', 'down'];
 
@@ -28,6 +31,9 @@ var lives = 3;
 // going to awaits to be dismissed
 var fall_time = 700, press_time = 3000;
 
+// The number of presets
+var PRESETS = 6;
+
 // The timer handler
 var timer = null;
 
@@ -47,9 +53,29 @@ var expected = 0;
 // The panel being displayed
 var current = 1;
 
-// Function that returns the panel tag itself
-function getPanel (preset) {
-    return '<section class="preset-' + preset + '" id="panel-' + (n++) + '"><i></i></section>'
+// A function to toggle fullscreen
+function toggleFullScreen () {
+    var doc = window.document;
+    var docEl = doc.documentElement;
+
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement)
+        requestFullScreen.call(docEl);
+
+    else
+        cancelFullScreen.call(doc);
+}
+
+// The function that stops the gauge timer
+function stop_gauge () {
+    gauge.stop();
+}
+
+// The function that starts the gauge timer
+function start_gauge () {
+    gauge.css('width', 0).animate({width: '100%'}, press_time);
 }
 
 // The function that deals with losing lp
@@ -72,15 +98,13 @@ function game_over () {
     panels[0].fadeOut();
     panels[1].fadeOut();
     $('.lives').fadeOut();
+    $('.timer').fadeOut();
     $('h2').fadeOut();
     playing = false; 
 }
 
 // Evaluate the keycode related to the pan
 function evaluate_pan (type) {
-    if (!allowed)
-        return;
-
     for (var i = 0; i < 4; i++)
         if (type.indexOf(names[i]) >= 0)
             break;
@@ -92,6 +116,8 @@ function evaluate_pan (type) {
 function evaluate (key) {
     if (!playing || paused || !allowed)
         return;
+
+    stop_gauge();
 
     allowed = false;
 
@@ -117,8 +143,8 @@ function difficulty () {
     press_time -= 50;
     press_time = Math.max(press_time, 100);
 
-    fall_time -= 5;
-    fall_time = Math.max(fall_time, 200);    
+    // fall_time -= 5;
+    // fall_time = Math.max(fall_time, 200);    
 }
 
 // Generates a number in [0, 4]
@@ -142,27 +168,26 @@ function game () {
     panels[current].css('z-index', 0);
     panels[next].css('z-index', 1);
 
-    panels[next].removeClass().addClass('preset-' + (rounds % 5));
+    panels[next].removeClass().addClass('preset-' + (rounds % PRESETS));
 
     var direction = rand();
+
+    expected = direction;
 
     current = next;
 
     arrows[current].removeClass().addClass('icon-' + names[direction] + '-open');
-
-    expected = direction;
 
     var pos = positions[rand()];
 
     panels[current].css({left: pos.x, top: pos.y});
 
     panels[current].animate({left: 0, top: 0}, fall_time, function () {
+        start_gauge();
+
         allowed = true;
 
-        panels[(current ^ 1)].css('top', '-100%');
-
         clearTimeout(timer);
-
         timer = setTimeout(wrong, press_time);
     });
 }
@@ -179,6 +204,8 @@ $(document).ready(function() {
         clearTimeout(timer);
     });
 
+    gauge = $('#gauge');
+
     panels[0] = $('#panel-0');
     panels[1] = $('#panel-1');
 
@@ -194,15 +221,19 @@ $(document).ready(function() {
 
     Hammer(document.body, {
         recognizers: [
-            [Hammer.Pan,{ direction: Hammer.DIRECTION_ALL }]
+            [ Hammer.Swipe,
+                {
+                    direction: Hammer.DIRECTION_ALL 
+                }
+            ]
         ]
-    }).on('panleft', function (event) {
+    }).on('swipeleft', function (event) {
         evaluate_pan(event.type);
-    }).on('panup', function (event) {
+    }).on('swipeup', function (event) {
         evaluate_pan(event.type);
-    }).on('panright', function (event) {
+    }).on('swiperight', function (event) {
         evaluate_pan(event.type);
-    }).on('pandown', function (event) {
+    }).on('swipedown', function (event) {
         evaluate_pan(event.type);
     });
     
@@ -213,12 +244,15 @@ $(document).ready(function() {
 
         $('h2').fadeIn();
         $('.lives').fadeIn();
+        $('.timer').fadeIn();
 
         fall_time = 700;
         press_time = 3000;
         rounds = 0;
         lives = 3;
         right = 0;
+
+        gauge.css('width', 0);
 
         panels[0].fadeIn();
         panels[1].fadeIn();

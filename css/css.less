@@ -10,7 +10,7 @@
 h2 {
 	display: none;
 	position: absolute;
-	left: 1em;
+	left: 0.5em;
 	top: 0.5em;
 	font-size: 2.6em;
 	z-index: 100;
@@ -29,16 +29,36 @@ h2 {
 .lives {
 	display: none;
 	position: absolute;
-	left: 2.8em;
+	left: 1.3em;
 	top: 7em;
+	width: 5em;
 	font-size: 2.6em;
 	z-index: 100;
 	color: darken(#d5dee9, 60%);
 	text-shadow: 1px 2px 0 darken(#d5dee9, 20%);
-	font-family: 'Yanone Kaffeesatz', sans-serif;
 	line-height: 1.8em;
-	border-radius: 100%;
 	text-align: center;
+}
+
+.timer {
+	display: none;
+	position: absolute;
+	left: 1.3em;
+	top: 9em;
+
+	width: 5em;
+	height: 0.3em;
+
+	z-index: 100;
+
+	box-shadow: 1px 2px 0 darken(#d5dee9, 20%);
+	border-radius: 1em;
+	border: solid 0.2em darken(#d5dee9, 60%);
+
+	.fill {
+		background: darken(#d5dee9, 60%);
+		height: 100%;
+	}
 }
 
 h1 {
@@ -164,6 +184,7 @@ a {
 @color2: #E7E737;
 @color3: #6D9DD1;
 @color4: #7E45D3;
+@color5: #d3b84b;
 
 
 .preset-error {
@@ -194,6 +215,11 @@ a {
 .preset-4 {
 	background: @color4;
 	color: darken(@color4, 20%);
+}
+
+.preset-5 {
+	background: @color5;
+	color: darken(@color5, 20%);
 }
 
 @media (max-width: 400px) {
