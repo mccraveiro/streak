@@ -55,22 +55,25 @@ function getPanel (preset) {
 // The function that deals with losing lp
 function wrong () {
     arrows[current].removeClass().addClass('icon-cancel');
-    // panels[current].removeClass().addClass('preset-error');
 
     $('.lives i:nth-child(' + lives + ')').removeClass().addClass('icon-circle-empty')
 
     clearTimeout(timer);
 
-    if (--lives === 0) {
-        clearTimeout(timer);
-        panels[0].fadeOut();
-        panels[1].fadeOut();
-        $('.lives').fadeOut();
-        playing = false;
-        return;
-    }
-
+    if (--lives === 0)
+        return game_over();
+    
     game();
+}
+
+// The game over handler
+function game_over () {
+    clearTimeout(timer);
+    panels[0].fadeOut();
+    panels[1].fadeOut();
+    $('.lives').fadeOut();
+    $('h2').fadeOut();
+    playing = false; 
 }
 
 // Evaluate the keycode related to the pan
