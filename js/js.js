@@ -22,7 +22,7 @@ var rounds = 0;
 var right = 0;
 
 // The number of remaining lives
-var lives = 5;
+var lives = 3;
 
 // The time (ms) that panels are going to come and are
 // going to awaits to be dismissed
@@ -218,7 +218,7 @@ $(document).ready(function() {
             fall_time = 700;
             press_time = 3000;
             rounds = 0;
-            lives = 5;
+            lives = 3;
             right = 0;
 
             panels[0].fadeIn();
